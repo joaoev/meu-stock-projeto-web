@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String    @id @default(uuid())
+  name       String
+  email      String    @unique
+  password   String
+  store_name String
+  createdAt  DateTime  @default(now())
+  Product    Product[]
+  Sale       Sale[]
+
+  @@map("users")
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  id_user     String
+  code        String   @unique
+  name        String
+  description String
+  price       Float
+  quantity    Int
+  url_image   String?
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [id_user], references: [id])
+
+  @@map("products")
+}
+
+model Sale {
+  id             String        @id @default(uuid())
+  id_user        String
+  sub_total      Float
+  discounts      Float?
+  total          Float
+  payment_method PaymentMethod @default(money)
+  createdAt      DateTime      @default(now())
+  User           User          @relation(fields: [id_user], references: [id], onDelete: Cascade)
+  Item           Item[]
+
+  @@map("sales")
+}
+
+model Item {
+  id           String   @id @default(uuid())
+  id_sale      String
+  order        Int
+  cod          String
+  name_product String
+  unit_value   Float
+  quantity     Int
+  total        Float
+  createdAt    DateTime @default(now())
+  sale         Sale     @relation(fields: [id_sale], references: [id])
+
+  @@map("items")
+}
+
+enum PaymentMethod {
+  card
+  money
+  pix
+}

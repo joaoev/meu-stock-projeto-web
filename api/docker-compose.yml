@@ -1,0 +1,12 @@
+name: my-stock-local
+
+services:
+  my-stock-database:
+    image: bitnami/postgresql:13.16.0
+    container_name: my-stock-database
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=database
