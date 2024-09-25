@@ -38,7 +38,7 @@ npx prisma migrate dev
 
 2. WEB
 
-Caso apresente algum erro ao instalar, tente:
+Instalação padrão
 
 ```console
 npm i
